@@ -6,8 +6,9 @@ client itself. Part of Open Roll 5e (the suite repo is `..`, its CLAUDE.md has t
 conventions; the module is public but kept out of the catalogue, so `repos.json` gives it no
 blurb). Plain ES modules, no build step, no patching, no libWrapper, MIT. Built from suite issue #9.
 
-**State (2026-10-28).** 0.1.0 on `main`, unreleased: the arrow-keys rule, `npm run verify` green.
-Not yet on the sandbox or prod.
+**State (2026-10-28).** 1.0.0 released (the arrow-keys rule) and on prod through the installer;
+the sandbox carries the same code (its manifest still read 0.1.0 when deployed). A 0.1.0 release
+was cut first and deleted minutes later, before any install read it, when the user set 1.0.
 
 ## The rules
 
@@ -34,8 +35,9 @@ Not yet on the sandbox or prod.
 
 - The template's Biome and Vitest; `npm run verify` is the gate, its exit code the verdict.
 - The kit copies (`scripts/kit/`, `tests/kit/`) are the suite's; never edit them here.
-- Releases through the reusable workflow from an annotated tag; a patch by default, a minor only
-  when the user names one.
+- **Versions (the user's rule for this module, not the family's patch default):** a new house rule
+  is a minor (1.1.0, 1.2.0); a fix to an existing rule is a patch (1.1.1). Releases through the
+  reusable workflow from an annotated tag, only on the user's word.
 - Issues welcome, pull requests not accepted (`.github/PULL_REQUEST_TEMPLATE.md`).
 - A new rule: its file under `scripts/rules/`, its tests, its setting in `houserules.js`, its
   strings in `lang/en.json`, its row in the README.
