@@ -4,12 +4,20 @@
       "arrowKeys": {
         "name": "Arrow keys move tokens",
         "hint": "The arrow keys move the selected token and W A S D does nothing; the numpad pans the map. Applied on every player's client, with nothing for them to set. Off returns every client to Foundry's defaults."
+      },
+      "goingDown": {
+        "name": "Going down costs a level of Exhaustion",
+        "hint": "Each time a creature's Hit Points go from above 0 to 0 it gains one level of Exhaustion, at the drop, the sixth being death under the 2024 rules. Every way down counts: damage from a card, a drop save failed after a hold at 1, a hold declined, a GM's edit on the sheet; a creature held at 1 pays nothing. The level is written with the Hit Points, so By the Books' damage receipt records it and its Revert takes it back. Off: nothing happens at 0."
       }
     },
     "arrowKeys": {
       "applied": "arrow keys move tokens: {n} binding(s) set ({why}).",
       "restored": "arrow keys rule off: {n} binding(s) back to Foundry's defaults ({why}).",
       "failed": "could not write this client's keybindings."
+    },
+    "goingDown": {
+      "charged": "{name} drops to 0 Hit Points: Exhaustion {level}.",
+      "failed": "could not add {name}'s level of Exhaustion at the drop; add it by hand."
     }
   }
 }

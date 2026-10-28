@@ -14,6 +14,17 @@ catalogue.
   a player changes it in Configure Controls or presses Reset Defaults; nothing for a player to set.
   Off puts every client back to Foundry's defaults (a key a player bound to something else
   meanwhile is left alone).
+- **Going down costs a level of Exhaustion.** Each time a creature's Hit Points go from above 0
+  to 0 it gains one level of Exhaustion, at the drop (not when it is healed), the sixth being
+  death under the 2024 rules. The rule reads the Hit Point write itself, so every way down counts
+  the same: damage applied from a card, a drop save failed after a hold at 1, a hold declined, a
+  GM's edit on the sheet. A creature held at 1 (Death Ward, Relentless Endurance, a save that
+  wins) never reaches 0 and pays nothing. The level is written in the same update as the Hit
+  Points, on the client making it, so with [By the Books](https://github.com/Txpple/fvtt-mod-bythebooks)
+  the damage receipt shows "Exhaustion 0 → 1" and its Revert takes the level back with the Hit
+  Points; without it there is no receipt and the GM edits the level by hand. A write that already
+  sets Exhaustion (a Revert restoring a receipt's recorded state) is left alone, so no drop is
+  charged twice. Off: nothing happens at 0.
 
 ## Installation
 
@@ -30,9 +41,10 @@ Requires Foundry VTT v13 or v14 and the dnd5e system 5.x or 6.x. No other depend
 _Game Settings → Configure Settings → Open Roll 5e: House Rules._ World settings: a GM sees and
 sets them, a player neither.
 
-| Setting                | Default | What it does                                                                                                             |
-| ---------------------- | ------- | ------------------------------------------------------------------------------------------------------------------------ |
-| Arrow keys move tokens | on      | The arrows move the selected token, W A S D is unbound, the numpad pans. Off returns every client to Foundry's defaults. |
+| Setting                                 | Default | What it does                                                                                                                                  |
+| --------------------------------------- | ------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| Arrow keys move tokens                  | on      | The arrows move the selected token, W A S D is unbound, the numpad pans. Off returns every client to Foundry's defaults.                      |
+| Going down costs a level of Exhaustion  | on      | A creature whose Hit Points go from above 0 to 0 gains one level of Exhaustion in that same write, capped at 6. Off: nothing happens at 0.     |
 
 ## Repository layout
 
@@ -41,6 +53,7 @@ module.json                    the Foundry manifest
 scripts/
   houserules.js                the entry point: each rule's setting, and the write on every client
   rules/arrow-keys.js          the arrow-keys rule, pure: what the keybindings should be
+  rules/going-down.js          the going-down rule, pure: what a drop to 0 costs
   kit/                         the Open Roll 5e kit (log.js and the rest), the same bytes in every
                                module that holds it (the suite keeps them)
 lang/en.json                   every word a player reads
