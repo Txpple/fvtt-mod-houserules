@@ -1,7 +1,7 @@
 {
   "id": "fvtt-mod-houserules",
   "title": "Open Roll 5e: House Rules",
-  "description": "One table's house rules as always-on overrides, each a GM setting on by default and applied on every player's client with nothing for them to set. First: the arrow keys move tokens.",
+  "description": "One table's house rules as always-on overrides, each a GM setting on by default and applied on every player's client with nothing for them to set. The GM decides how the table plays once, every player gets the same Foundry, and a new player learns the game, not the menus.",
   "version": "0.1.0",
   "authors": [
     {
