@@ -1,0 +1,15 @@
+{
+  "fvtt-mod-houserules": {
+    "settings": {
+      "arrowKeys": {
+        "name": "Arrow keys move tokens",
+        "hint": "The arrow keys move the selected token and W A S D does nothing; the numpad pans the map. Applied on every player's client, with nothing for them to set. Off returns every client to Foundry's defaults."
+      }
+    },
+    "arrowKeys": {
+      "applied": "arrow keys move tokens: {n} binding(s) set ({why}).",
+      "restored": "arrow keys rule off: {n} binding(s) back to Foundry's defaults ({why}).",
+      "failed": "could not write this client's keybindings."
+    }
+  }
+}
