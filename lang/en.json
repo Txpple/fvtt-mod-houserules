@@ -11,7 +11,7 @@
       },
       "sidebarTabs": {
         "name": "Players see only the sidebar tabs they use",
-        "hint": "Players lose the Placeables, Items, Rollable Tables, Cards and Macros tabs: no button, open or collapsed, and no way to switch or pop one out. Chat, Combat, Actors, Journal, Playlists, Compendium Packs, Settings and any tab a module adds stay. A GM keeps every tab. Turning it off brings the tabs back when each client reloads."
+        "hint": "Players lose the Combat, Placeables, Items, Rollable Tables, Cards and Macros tabs: no button, open or collapsed, and no way to switch or pop one out. Chat, Actors, Journal, Playlists, Compendium Packs, Settings and any tab a module adds stay. A GM keeps every tab. Turning it off brings the tabs back when each client reloads."
       }
     },
     "arrowKeys": {

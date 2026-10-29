@@ -16,8 +16,8 @@ export const ID = "sidebarTabs";
 /** The tab a player falls back to when the tab they are on is taken away. */
 export const FALLBACK = "chat";
 
-/** The tabs players lose: Placeables, Items, Rollable Tables, Cards, Macros. */
-export const HIDDEN = ["placeables", "items", "tables", "cards", "macros"];
+/** The tabs players lose: Combat, Placeables, Items, Rollable Tables, Cards, Macros. */
+export const HIDDEN = ["combat", "placeables", "items", "tables", "cards", "macros"];
 
 /** Whether the rule keeps this user from this tab. */
 export function isHidden(tab, { on, isGM }) {

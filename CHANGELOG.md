@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.2.1
+
+- **Players see only the sidebar tabs they use** now hides the Combat tab from players too (the
+  user's call). Nothing in Foundry, dnd5e or the table's modules switches a player to it; GMs
+  keep it.
+
 ## 1.2.0
 
 - **Players see only the sidebar tabs they use** (issue #2). A world setting, on by default: a

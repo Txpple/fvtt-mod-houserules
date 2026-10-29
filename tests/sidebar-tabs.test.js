@@ -29,7 +29,6 @@ describe("mark — the player's strip", () => {
     expect(mark(tabs, true, new Set()).sort()).toEqual([...HIDDEN].sort());
     expect(visible(tabs)).toEqual([
       "chat",
-      "combat",
       "actors",
       "journal",
       "playlists",
@@ -79,9 +78,9 @@ describe("mark — the player's strip", () => {
 
 describe("isHidden and fallback — who loses what, and where they land", () => {
   const player = { on: true, isGM: false };
-  it("hides the five from a player while on", () => {
+  it("hides the six from a player while on", () => {
     for (const id of HIDDEN) expect(isHidden(id, player)).toBe(true);
-    for (const id of ["chat", "combat", "actors", "journal", "settings", "dice-so-nice"]) {
+    for (const id of ["chat", "actors", "journal", "settings", "dice-so-nice"]) {
       expect(isHidden(id, player)).toBe(false);
     }
   });

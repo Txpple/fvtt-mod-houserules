@@ -2,7 +2,7 @@
   "id": "fvtt-mod-houserules",
   "title": "Open Roll 5e: House Rules",
   "description": "One table's house rules as always-on overrides, each a GM setting on by default and applied on every player's client with nothing for them to set. The GM decides how the table plays once, every player gets the same Foundry, and a new player learns the game, not the menus.",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "authors": [
     {
       "name": "Matthew Sippel"
@@ -36,7 +36,7 @@
   },
   "url": "https://github.com/Txpple/fvtt-mod-houserules",
   "manifest": "https://github.com/Txpple/fvtt-mod-houserules/releases/latest/download/module.json",
-  "download": "https://github.com/Txpple/fvtt-mod-houserules/releases/download/v1.2.0/fvtt-mod-houserules.zip",
+  "download": "https://github.com/Txpple/fvtt-mod-houserules/releases/download/v1.2.1/fvtt-mod-houserules.zip",
   "readme": "https://github.com/Txpple/fvtt-mod-houserules#readme",
   "license": "MIT"
 }
