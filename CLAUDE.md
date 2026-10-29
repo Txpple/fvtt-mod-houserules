@@ -6,10 +6,10 @@ client itself. Part of Open Roll 5e (the suite repo is `..`, its CLAUDE.md has t
 conventions; the module is public but kept out of the catalogue, so `repos.json` gives it no
 blurb). Plain ES modules, no build step, no patching, no libWrapper, MIT. Built from suite issue #9.
 
-**State (2026-10-28).** 1.1.0 on the `going-down` branch (the going-down rule, moved here from By
-the Books, issue #1), unreleased: it goes to the sandbox, then a release and prod, alongside the
-By the Books patch that drops its own copy of the rule. 1.0.0 (the arrow-keys rule) is the release
-on prod; the sandbox carries its code under a 0.1.0 manifest.
+**State (2026-10-29).** 1.1.0 released (the going-down rule, moved here from By the Books, issue
+#1) and on prod through the installer, byte-identical; the sandbox carries the same code. By the
+Books 3.4.18 drops its own copy of the rule and its setting; until it is installed beside this,
+its write sets Exhaustion first and this rule steps back, so a drop is charged once either way.
 
 ## The rules
 
