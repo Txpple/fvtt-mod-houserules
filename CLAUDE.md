@@ -7,10 +7,9 @@ conventions; the module is public but kept out of the catalogue, so `repos.json`
 blurb). Plain ES modules, no build step, no patching, no libWrapper, MIT. Built from suite issue #9.
 
 **State (2026-10-29).** 1.2.0 released (the sidebar-tabs rule, issue #2, walked in the sandbox
-as a player); not yet on prod, which runs 1.1.0 (the going-down rule, moved here from By the
-Books, issue #1). By the Books 3.4.18 drops its own copy of the going-down rule and its setting;
-until it is installed beside this, its write sets Exhaustion first and this rule steps back, so
-a drop is charged once either way.
+as a player) and on prod through the installer, byte-identical. By the Books 3.4.18 drops its
+own copy of the going-down rule and its setting; until it is installed beside this, its write
+sets Exhaustion first and this rule steps back, so a drop is charged once either way.
 
 ## The rules
 
