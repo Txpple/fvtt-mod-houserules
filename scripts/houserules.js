@@ -5,8 +5,8 @@
  * and applied by the client the rule concerns, with no server-side part and no elected client:
  * the arrow-keys rule on every client for itself (at ready, when the GM flips the setting, and
  * whenever the client's own keybindings drift from it), the going-down rule on whichever client
- * writes the Hit Points, inside that very write, the sidebar-tabs rule on each player's client
- * before its sidebar is built. A player never opens a menu.
+ * writes the Hit Points, inside that very write, the sidebar-tabs rules on each client before
+ * (a player's) or as (a GM's) its sidebar is drawn. A player never opens a menu.
  *
  * Each rule is a file under scripts/rules/ holding its pure half (what should be so, and the one
  * write that gets there); this file registers the rule's setting and runs the write. Words a
@@ -54,9 +54,32 @@ async function applyArrowKeys(why) {
 /** The tabs this client's sidebar-tabs rule marked GM-only, so turning it off unmarks only those. */
 const markedTabs = new Set();
 
-/** This client's view of the sidebar-tabs rule: the setting and whether the user is a GM. */
+/** This client's view of the sidebar-tabs rules: both settings and whether the user is a GM. */
 function sidebarUser() {
-  return { on: game.settings.get(MODULE_ID, sidebarTabs.ID), isGM: Boolean(game.user?.isGM) };
+  return {
+    on: game.settings.get(MODULE_ID, sidebarTabs.ID),
+    gmOn: game.settings.get(MODULE_ID, sidebarTabs.GM_ID),
+    isGM: Boolean(game.user?.isGM)
+  };
+}
+
+/**
+ * Take this user's hidden tabs off a sidebar already drawn: leave a hidden tab for Chat first,
+ * close its popout, and remove its button, after which `changeTab` refuses it.
+ */
+function removeHiddenTabs(ids, user) {
+  const sidebar = ui.sidebar;
+  if (!ids.length || !sidebar?.rendered) return;
+  try {
+    const to = sidebarTabs.fallback(sidebar.tabGroups?.primary, user);
+    if (to) sidebar.changeTab(to, "primary");
+    for (const id of ids) {
+      sidebar.popouts?.[id]?.close();
+      sidebar.element?.querySelector(`nav.tabs [data-tab="${id}"]`)?.closest("li")?.remove();
+    }
+  } catch (err) {
+    log.error(t("sidebarTabs.failed"), err);
+  }
 }
 
 /**
@@ -72,18 +95,18 @@ function applySidebarTabs(why) {
   const changed = sidebarTabs.mark(CONFIG.ui.sidebar?.TABS, user.on, markedTabs);
   if (!changed.length) return;
   log.info(t(user.on ? "sidebarTabs.applied" : "sidebarTabs.restored", { why, n: changed.length }));
-  const sidebar = ui.sidebar;
-  if (!user.on || !sidebar?.rendered) return;
-  try {
-    const to = sidebarTabs.fallback(sidebar.tabGroups?.primary, user);
-    if (to) sidebar.changeTab(to, "primary");
-    for (const id of changed) {
-      sidebar.popouts?.[id]?.close();
-      sidebar.element?.querySelector(`nav.tabs [data-tab="${id}"]`)?.closest("li")?.remove();
-    }
-  } catch (err) {
-    log.error(t("sidebarTabs.failed"), err);
-  }
+  if (user.on) removeHiddenTabs(changed, user);
+}
+
+/**
+ * The GM rule on a GM's client: `gmOnly` does not hide a tab from a GM, so the buttons come off
+ * the strip as the sidebar draws it (renderSidebar) and at once on a flip to on. Off: the buttons
+ * return when the client reloads (the setting asks for it).
+ */
+function applyGmSidebarTabs() {
+  const user = sidebarUser();
+  if (!user.isGM) return;
+  removeHiddenTabs(sidebarTabs.hiddenFor(user), user);
 }
 
 Hooks.once("init", () => {
@@ -118,14 +141,30 @@ Hooks.once("init", () => {
     requiresReload: true,
     onChange: () => applySidebarTabs("setting")
   });
+  // The GM half: read as each GM's sidebar draws; a flip takes the buttons away at once, and
+  // Foundry offers a reload for everyone, which brings them back.
+  game.settings.register(MODULE_ID, sidebarTabs.GM_ID, {
+    name: `${MODULE_ID}.settings.gmSidebarTabs.name`,
+    hint: `${MODULE_ID}.settings.gmSidebarTabs.hint`,
+    scope: "world",
+    config: true,
+    type: Boolean,
+    default: true,
+    requiresReload: true,
+    onChange: () => applyGmSidebarTabs()
+  });
 });
 
 // The sidebar-tabs rule: setup runs after every module's init (where a module adds its own tab)
 // and before the UI is built, so the sidebar draws a player's strip without the hidden buttons.
 Hooks.once("setup", () => applySidebarTabs("setup"));
 
-// Belt and braces for a way in this rule did not foresee: a hidden tab that becomes active sends
-// the player back to Chat, and a hidden tab's popout (`ui.items.renderPopout()` from a macro or a
+// The GM rule: the strip is drawn on the sidebar's first render, and each render puts nothing back
+// (later renders draw the tabs' contents only), so a removal here holds; a second finds nothing.
+Hooks.on("renderSidebar", () => applyGmSidebarTabs());
+
+// Belt and braces for a way in neither rule foresaw: a hidden tab that becomes active sends
+// the user back to Chat, and a hidden tab's popout (`ui.items.renderPopout()` from a macro or a
 // module's key) closes as it opens. The bounce waits a tick: Foundry fires the hook before it
 // finishes its own change (the content's active class), which would undo a change made inside it.
 Hooks.on("changeSidebarTab", app => {

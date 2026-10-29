@@ -1,5 +1,13 @@
 import { describe, expect, it } from "vitest";
-import { FALLBACK, HIDDEN, fallback, isHidden, mark } from "../scripts/rules/sidebar-tabs.js";
+import {
+  FALLBACK,
+  GM_HIDDEN,
+  HIDDEN,
+  fallback,
+  hiddenFor,
+  isHidden,
+  mark
+} from "../scripts/rules/sidebar-tabs.js";
 
 /** Foundry 14's Sidebar.TABS as Dice So Nice leaves it (its tab just above Settings). */
 function foundryTabs() {
@@ -94,5 +102,35 @@ describe("isHidden and fallback — who loses what, and where they land", () => 
     expect(fallback("journal", player)).toBeNull();
     expect(fallback(undefined, player)).toBeNull();
     expect(fallback("macros", { on: true, isGM: true })).toBeNull();
+  });
+});
+
+describe("the GM rule — its own list and its own switch", () => {
+  const gm = { on: true, gmOn: true, isGM: true };
+  it("takes Combat, Rollable Tables, Cards and Macros from a GM, nothing else", () => {
+    expect(hiddenFor(gm)).toEqual(["combat", "tables", "cards", "macros"]);
+    const kept = Object.keys(foundryTabs()).filter(id => !isHidden(id, gm));
+    expect(kept).toEqual([
+      "chat",
+      "scenes",
+      "placeables",
+      "actors",
+      "items",
+      "journal",
+      "playlists",
+      "compendium",
+      "dice-so-nice",
+      "settings"
+    ]);
+  });
+  it("each switch governs its own side", () => {
+    expect(hiddenFor({ on: true, gmOn: false, isGM: true })).toEqual([]);
+    expect(hiddenFor({ on: false, gmOn: true, isGM: true })).toEqual(GM_HIDDEN);
+    expect(hiddenFor({ on: true, gmOn: true, isGM: false })).toEqual(HIDDEN);
+    expect(hiddenFor({ on: false, gmOn: true, isGM: false })).toEqual([]);
+  });
+  it("a GM on a hidden tab falls back to Chat; on Items stays", () => {
+    expect(fallback("combat", gm)).toBe("chat");
+    expect(fallback("items", gm)).toBeNull();
   });
 });

@@ -27,14 +27,22 @@ catalogue.
   charged twice. Off: nothing happens at 0.
 - **Players see only the sidebar tabs they use.** A player's sidebar loses Combat, Placeables,
   Items, Rollable Tables, Cards and Macros; Chat, Actors, Journal, Playlists, Compendium Packs,
-  Settings and any tab a module adds (Dice So Nice's d20) stay, in Foundry's order. A GM keeps
-  every tab. The tabs are taken away before the sidebar is built, the way Foundry hides Scenes
+  Settings and any tab a module adds (Dice So Nice's d20) stay, in Foundry's order. A GM's tabs
+  are the next rule's. The tabs are taken away before the sidebar is built, the way Foundry hides Scenes
   from players, so there is no way in: no button on the strip, open or collapsed, nothing to
   right-click to pop out, and a switch to one (`changeTab`, `ui.items.activate()`, a module's
   key) is refused; a hidden tab's popout opened from a macro closes as it opens. Turned on during
   play, a player on a hidden tab goes back to Chat and the buttons go at once; turned off,
   Foundry offers the GM a reload for everyone, which brings the tabs back. Open Server's jump
   from the Players list works as before.
+- **GMs see only the sidebar tabs they use.** A GM's sidebar loses Combat, Rollable Tables,
+  Cards and Macros; Chat, Scenes, Placeables, Actors, Items, Journal, Playlists, Compendium
+  Packs, Settings and any tab a module adds stay. Foundry has no flag that hides a tab from a GM,
+  so the buttons come off as the sidebar draws; with no button the tab is refused the same way
+  (`changeTab`, `ui.combat.activate()`), and its popout closes as it opens. The encounter itself
+  is untouched: the combat runs, and the tracker's controls are simply not in the sidebar. Its
+  own switch, apart from the players' rule; turned on during play, the buttons go at once;
+  turned off, the tabs return on reload.
 
 ## Installation
 
@@ -58,7 +66,8 @@ sets them, a player neither.
 | --------------------------------------- | ------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
 | Arrow keys move tokens                  | on      | The arrows move the selected token, W A S D is unbound, the numpad pans. Off returns every client to Foundry's defaults.                      |
 | Going down costs a level of Exhaustion  | on      | A creature whose Hit Points go from above 0 to 0 gains one level of Exhaustion in that same write, capped at 6. Off: nothing happens at 0.     |
-| Players see only the sidebar tabs they use | on   | Players lose Combat, Placeables, Items, Rollable Tables, Cards and Macros; GMs keep every tab. Off brings them back on reload.                          |
+| Players see only the sidebar tabs they use | on   | Players lose Combat, Placeables, Items, Rollable Tables, Cards and Macros. Off brings them back on reload.                                      |
+| GMs see only the sidebar tabs they use     | on   | GMs lose Combat, Rollable Tables, Cards and Macros. Off brings them back on reload.                                                             |
 
 ## Repository layout
 
@@ -68,7 +77,7 @@ scripts/
   houserules.js                the entry point: each rule's setting, and the write on every client
   rules/arrow-keys.js          the arrow-keys rule, pure: what the keybindings should be
   rules/going-down.js          the going-down rule, pure: what a drop to 0 costs
-  rules/sidebar-tabs.js        the sidebar-tabs rule, pure: which tabs a player loses
+  rules/sidebar-tabs.js        the sidebar-tabs rules, pure: which tabs a player or a GM loses
   kit/                         the Open Roll 5e kit (log.js and the rest), the same bytes in every
                                module that holds it (the suite keeps them)
 lang/en.json                   every word a player reads

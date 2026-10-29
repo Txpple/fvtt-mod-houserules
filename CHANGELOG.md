@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.3.0
+
+- **GMs see only the sidebar tabs they use**, a new rule with its own switch, on by default: a
+  GM's sidebar loses Combat, Rollable Tables, Cards and Macros; Chat, Scenes, Placeables,
+  Actors, Items, Journal, Playlists, Compendium Packs, Settings and module tabs stay. The
+  buttons come off as the sidebar draws, so the tabs cannot be switched to or popped out. The
+  players' rule is unchanged.
+
 ## 1.2.1
 
 - **Players see only the sidebar tabs they use** now hides the Combat tab from players too (the

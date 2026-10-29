@@ -8,10 +8,17 @@
  * player's client (Scenes is marked so by Foundry itself). With no button there is no way in: the
  * strip, open or collapsed, has nothing to click or right-click to pop out, and `changeTab` to the
  * tab throws, as it does for Scenes. The rule marks the tabs in HIDDEN so, and only those: a tab a
- * module adds (Dice So Nice's) stays, and a GM's client draws every tab as before.
+ * module adds (Dice So Nice's) stays.
+ *
+ * The GM half is its own rule and setting (GM_ID) with its own list (GM_HIDDEN). `gmOnly` never
+ * hides a tab from a GM, so scripts/houserules.js takes those buttons off a GM's strip once the
+ * sidebar draws it; with the button gone `changeTab` refuses the tab the same way.
  */
 
 export const ID = "sidebarTabs";
+
+/** The GM rule's setting. */
+export const GM_ID = "gmSidebarTabs";
 
 /** The tab a player falls back to when the tab they are on is taken away. */
 export const FALLBACK = "chat";
@@ -19,9 +26,22 @@ export const FALLBACK = "chat";
 /** The tabs players lose: Combat, Placeables, Items, Rollable Tables, Cards, Macros. */
 export const HIDDEN = ["combat", "placeables", "items", "tables", "cards", "macros"];
 
-/** Whether the rule keeps this user from this tab. */
-export function isHidden(tab, { on, isGM }) {
-  return Boolean(on) && !isGM && HIDDEN.includes(tab);
+/** The tabs GMs lose: Combat, Rollable Tables, Cards, Macros. */
+export const GM_HIDDEN = ["combat", "tables", "cards", "macros"];
+
+/**
+ * The tabs taken from this user: HIDDEN for a player while `on`, GM_HIDDEN for a GM while `gmOn`.
+ *
+ * @param {{ on: boolean, gmOn?: boolean, isGM: boolean }} user  The two settings and the user.
+ */
+export function hiddenFor({ on, gmOn = false, isGM }) {
+  if (isGM) return gmOn ? GM_HIDDEN : [];
+  return on ? HIDDEN : [];
+}
+
+/** Whether a rule keeps this user from this tab. */
+export function isHidden(tab, user) {
+  return hiddenFor(user).includes(tab);
 }
 
 /**

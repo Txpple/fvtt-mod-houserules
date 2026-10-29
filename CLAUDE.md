@@ -6,11 +6,11 @@ client itself. Part of Open Roll 5e (the suite repo is `..`, its CLAUDE.md has t
 conventions; the module is public but kept out of the catalogue, so `repos.json` gives it no
 blurb). Plain ES modules, no build step, no patching, no libWrapper, MIT. Built from suite issue #9.
 
-**State (2026-10-29).** 1.2.1 released (the sidebar-tabs rule, issue #2, walked in the sandbox
-as a player; 1.2.1 adds Combat to the hidden tabs) and on prod through the installer,
-byte-identical. By the Books 3.4.18 drops its own copy of the going-down rule and its setting;
-until it is installed beside this, its write sets Exhaustion first and this rule steps back, so
-a drop is charged once either way.
+**State (2026-10-29).** 1.3.0 released (the sidebar-tabs rules: players', issue #2, and GMs',
+both walked in the sandbox) and on prod through the installer, byte-identical. By the Books
+3.4.18 drops its own copy of the going-down rule and its setting; until it is installed beside
+this, its write sets Exhaustion first and this rule steps back, so a drop is charged once either
+way.
 
 ## The rules
 
@@ -33,7 +33,8 @@ a drop is charged once either way.
   Revert is never charged; an older receipt without a recorded level reverts Hit Points alone.
 - **Players see only the sidebar tabs they use** (`scripts/rules/sidebar-tabs.js`, setting
   `sidebarTabs`, issue #2). The user's list: players lose `combat`, `placeables`, `items`, `tables`,
-  `cards`, `macros` (HIDDEN; Combat since 1.2.1); everything else, a module's tab included (Dice So Nice's), stays. `mark`
+  `cards`, `macros` (HIDDEN; Combat since 1.2.1); everything else, a module's tab included
+  (Dice So Nice's), stays. `mark`
   sets `gmOnly` on those `CONFIG.ui.sidebar.TABS` descriptors at `setup` on a player's client
   (after every module's init, before the UI is built), Foundry's own way of hiding Scenes: no
   button, and `changeTab` to the tab throws. A live flip on falls back to Chat, closes the popout
@@ -41,6 +42,11 @@ a drop is charged once either way.
   (`requiresReload`). Hooks back it up: `changeSidebarTab` to a hidden tab bounces to Chat (a
   tick later, as Foundry sets the content class after the hook) and `renderAbstractSidebarTab`
   closes a hidden tab's popout.
+- **GMs see only the sidebar tabs they use** (same file, setting `gmSidebarTabs`, its own switch).
+  GMs lose `combat`, `tables`, `cards`, `macros` (GM_HIDDEN); `hiddenFor(user)` picks the list.
+  `gmOnly` never hides a tab from a GM, so `renderSidebar` removes the buttons from the strip
+  (drawn on the first render only, so a removal holds) and a live flip on does the same at once;
+  without a button `changeTab` throws, and the two backing hooks serve both rules.
 
 ## How the code is laid out
 
