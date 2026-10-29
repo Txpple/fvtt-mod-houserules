@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased (1.2.0: a new house rule is a minor)
+## 1.2.0
 
 - **Players see only the sidebar tabs they use** (issue #2). A world setting, on by default: a
   player's sidebar loses Placeables, Items, Rollable Tables, Cards and Macros; Chat, Combat,
