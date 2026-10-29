@@ -25,6 +25,16 @@ catalogue.
   Points; without it there is no receipt and the GM edits the level by hand. A write that already
   sets Exhaustion (a Revert restoring a receipt's recorded state) is left alone, so no drop is
   charged twice. Off: nothing happens at 0.
+- **Players see only the sidebar tabs they use.** A player's sidebar loses Placeables, Items,
+  Rollable Tables, Cards and Macros; Chat, Combat, Actors, Journal, Playlists, Compendium Packs,
+  Settings and any tab a module adds (Dice So Nice's d20) stay, in Foundry's order. A GM keeps
+  every tab. The tabs are taken away before the sidebar is built, the way Foundry hides Scenes
+  from players, so there is no way in: no button on the strip, open or collapsed, nothing to
+  right-click to pop out, and a switch to one (`changeTab`, `ui.items.activate()`, a module's
+  key) is refused; a hidden tab's popout opened from a macro closes as it opens. Turned on during
+  play, a player on a hidden tab goes back to Chat and the buttons go at once; turned off,
+  Foundry offers the GM a reload for everyone, which brings the tabs back. Open Server's jump
+  from the Players list works as before.
 
 ## Installation
 
@@ -33,6 +43,9 @@ Paste the manifest URL into Foundry's _Install Module_ dialog:
 ```
 https://github.com/Txpple/fvtt-mod-houserules/releases/latest/download/module.json
 ```
+
+Each rule has its own switch, a world setting on by default (below), so a table takes the rules
+it wants.
 
 Requires Foundry VTT v13 or v14 and the dnd5e system 5.x or 6.x. No other dependencies.
 
@@ -45,6 +58,7 @@ sets them, a player neither.
 | --------------------------------------- | ------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
 | Arrow keys move tokens                  | on      | The arrows move the selected token, W A S D is unbound, the numpad pans. Off returns every client to Foundry's defaults.                      |
 | Going down costs a level of Exhaustion  | on      | A creature whose Hit Points go from above 0 to 0 gains one level of Exhaustion in that same write, capped at 6. Off: nothing happens at 0.     |
+| Players see only the sidebar tabs they use | on   | Players lose Placeables, Items, Rollable Tables, Cards and Macros; GMs keep every tab. Off brings them back on reload.                          |
 
 ## Repository layout
 
@@ -54,6 +68,7 @@ scripts/
   houserules.js                the entry point: each rule's setting, and the write on every client
   rules/arrow-keys.js          the arrow-keys rule, pure: what the keybindings should be
   rules/going-down.js          the going-down rule, pure: what a drop to 0 costs
+  rules/sidebar-tabs.js        the sidebar-tabs rule, pure: which tabs a player loses
   kit/                         the Open Roll 5e kit (log.js and the rest), the same bytes in every
                                module that holds it (the suite keeps them)
 lang/en.json                   every word a player reads

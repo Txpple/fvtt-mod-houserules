@@ -5,7 +5,8 @@
  * and applied by the client the rule concerns, with no server-side part and no elected client:
  * the arrow-keys rule on every client for itself (at ready, when the GM flips the setting, and
  * whenever the client's own keybindings drift from it), the going-down rule on whichever client
- * writes the Hit Points, inside that very write. A player never opens a menu.
+ * writes the Hit Points, inside that very write, the sidebar-tabs rule on each player's client
+ * before its sidebar is built. A player never opens a menu.
  *
  * Each rule is a file under scripts/rules/ holding its pure half (what should be so, and the one
  * write that gets there); this file registers the rule's setting and runs the write. Words a
@@ -15,6 +16,7 @@
 import { createLogger } from "./kit/log.js";
 import * as arrowKeys from "./rules/arrow-keys.js";
 import * as goingDown from "./rules/going-down.js";
+import * as sidebarTabs from "./rules/sidebar-tabs.js";
 
 export const MODULE_ID = "fvtt-mod-houserules";
 
@@ -49,6 +51,41 @@ async function applyArrowKeys(why) {
   }
 }
 
+/** The tabs this client's sidebar-tabs rule marked GM-only, so turning it off unmarks only those. */
+const markedTabs = new Set();
+
+/** This client's view of the sidebar-tabs rule: the setting and whether the user is a GM. */
+function sidebarUser() {
+  return { on: game.settings.get(MODULE_ID, sidebarTabs.ID), isGM: Boolean(game.user?.isGM) };
+}
+
+/**
+ * Bring the sidebar's tab table in line with the sidebar-tabs setting on a player's client. Before
+ * the sidebar is built (setup) that is all it takes: a GM-only tab gets no button. On a live flip
+ * to on, the sidebar is already drawn, so the player first leaves a tab being taken away (back to
+ * Chat), its popout closes, and its button goes; with no button `changeTab` refuses it. A flip to
+ * off unmarks the table, and the buttons return when the client reloads (the setting asks for it).
+ */
+function applySidebarTabs(why) {
+  const user = sidebarUser();
+  if (user.isGM) return;
+  const changed = sidebarTabs.mark(CONFIG.ui.sidebar?.TABS, user.on, markedTabs);
+  if (!changed.length) return;
+  log.info(t(user.on ? "sidebarTabs.applied" : "sidebarTabs.restored", { why, n: changed.length }));
+  const sidebar = ui.sidebar;
+  if (!user.on || !sidebar?.rendered) return;
+  try {
+    const to = sidebarTabs.fallback(sidebar.tabGroups?.primary, user);
+    if (to) sidebar.changeTab(to, "primary");
+    for (const id of changed) {
+      sidebar.popouts?.[id]?.close();
+      sidebar.element?.querySelector(`nav.tabs [data-tab="${id}"]`)?.closest("li")?.remove();
+    }
+  } catch (err) {
+    log.error(t("sidebarTabs.failed"), err);
+  }
+}
+
 Hooks.once("init", () => {
   game.settings.register(MODULE_ID, arrowKeys.ID, {
     name: `${MODULE_ID}.settings.arrowKeys.name`,
@@ -69,6 +106,34 @@ Hooks.once("init", () => {
     type: Boolean,
     default: true
   });
+  // Read at setup on each player's client, before the sidebar draws its buttons; a flip takes the
+  // tabs away at once, and Foundry offers the GM a reload for everyone, which brings them back.
+  game.settings.register(MODULE_ID, sidebarTabs.ID, {
+    name: `${MODULE_ID}.settings.sidebarTabs.name`,
+    hint: `${MODULE_ID}.settings.sidebarTabs.hint`,
+    scope: "world",
+    config: true,
+    type: Boolean,
+    default: true,
+    requiresReload: true,
+    onChange: () => applySidebarTabs("setting")
+  });
+});
+
+// The sidebar-tabs rule: setup runs after every module's init (where a module adds its own tab)
+// and before the UI is built, so the sidebar draws a player's strip without the hidden buttons.
+Hooks.once("setup", () => applySidebarTabs("setup"));
+
+// Belt and braces for a way in this rule did not foresee: a hidden tab that becomes active sends
+// the player back to Chat, and a hidden tab's popout (`ui.items.renderPopout()` from a macro or a
+// module's key) closes as it opens. The bounce waits a tick: Foundry fires the hook before it
+// finishes its own change (the content's active class), which would undo a change made inside it.
+Hooks.on("changeSidebarTab", app => {
+  const to = sidebarTabs.fallback(app?.tabName, sidebarUser());
+  if (to) setTimeout(() => ui.sidebar.changeTab(to, "primary"), 0);
+});
+Hooks.on("renderAbstractSidebarTab", app => {
+  if (app?.isPopout && sidebarTabs.isHidden(app.tabName, sidebarUser())) void app.close();
 });
 
 // The going-down rule: a level of Exhaustion written into the same update that takes the Hit

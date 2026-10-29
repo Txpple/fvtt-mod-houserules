@@ -7,9 +7,11 @@ conventions; the module is public but kept out of the catalogue, so `repos.json`
 blurb). Plain ES modules, no build step, no patching, no libWrapper, MIT. Built from suite issue #9.
 
 **State (2026-10-29).** 1.1.0 released (the going-down rule, moved here from By the Books, issue
-#1) and on prod through the installer, byte-identical; the sandbox carries the same code. By the
-Books 3.4.18 drops its own copy of the rule and its setting; until it is installed beside this,
-its write sets Exhaustion first and this rule steps back, so a drop is charged once either way.
+#1) and on prod through the installer, byte-identical. On `main`, unreleased: the sidebar-tabs
+rule (issue #2), the sandbox carrying it (walked as a player); it waits on the user's word as
+1.2.0. By the Books 3.4.18 drops its own copy of the going-down rule and its setting; until it is
+installed beside this, its write sets Exhaustion first and this rule steps back, so a drop is
+charged once either way.
 
 ## The rules
 
@@ -30,6 +32,16 @@ its write sets Exhaustion first and this rule steps back, so a drop is charged o
   damage from an edit. By the Books' damage receipt snapshots `_source` Exhaustion either side of
   its `applyDamage` and its `revertPlan` restores the recorded prior level with the Hit Points, so
   Revert is never charged; an older receipt without a recorded level reverts Hit Points alone.
+- **Players see only the sidebar tabs they use** (`scripts/rules/sidebar-tabs.js`, setting
+  `sidebarTabs`, issue #2). The user's list: players lose `placeables`, `items`, `tables`, `cards`,
+  `macros` (HIDDEN); everything else, a module's tab included (Dice So Nice's), stays. `mark`
+  sets `gmOnly` on those `CONFIG.ui.sidebar.TABS` descriptors at `setup` on a player's client
+  (after every module's init, before the UI is built), Foundry's own way of hiding Scenes: no
+  button, and `changeTab` to the tab throws. A live flip on falls back to Chat, closes the popout
+  and removes the buttons; off unmarks only what the rule marked, the buttons back on reload
+  (`requiresReload`). Hooks back it up: `changeSidebarTab` to a hidden tab bounces to Chat (a
+  tick later, as Foundry sets the content class after the hook) and `renderAbstractSidebarTab`
+  closes a hidden tab's popout.
 
 ## How the code is laid out
 

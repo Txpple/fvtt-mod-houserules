@@ -8,6 +8,10 @@
       "goingDown": {
         "name": "Going down costs a level of Exhaustion",
         "hint": "Each time a creature's Hit Points go from above 0 to 0 it gains one level of Exhaustion, at the drop, the sixth being death under the 2024 rules. Every way down counts: damage from a card, a drop save failed after a hold at 1, a hold declined, a GM's edit on the sheet; a creature held at 1 pays nothing. The level is written with the Hit Points, so By the Books' damage receipt records it and its Revert takes it back. Off: nothing happens at 0."
+      },
+      "sidebarTabs": {
+        "name": "Players see only the sidebar tabs they use",
+        "hint": "Players lose the Placeables, Items, Rollable Tables, Cards and Macros tabs: no button, open or collapsed, and no way to switch or pop one out. Chat, Combat, Actors, Journal, Playlists, Compendium Packs, Settings and any tab a module adds stay. A GM keeps every tab. Turning it off brings the tabs back when each client reloads."
       }
     },
     "arrowKeys": {
@@ -18,6 +22,11 @@
     "goingDown": {
       "charged": "{name} drops to 0 Hit Points: Exhaustion {level}.",
       "failed": "could not add {name}'s level of Exhaustion at the drop; add it by hand."
+    },
+    "sidebarTabs": {
+      "applied": "sidebar: {n} tab(s) hidden from this player ({why}).",
+      "restored": "sidebar rule off: {n} tab(s) return on reload ({why}).",
+      "failed": "could not take the hidden tabs off this player's sidebar."
     }
   }
 }
