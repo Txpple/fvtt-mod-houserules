@@ -24,8 +24,8 @@ its write sets Exhaustion first and this rule steps back, so a drop is charged o
   without Exhaustion, or an update that already sets Exhaustion. `houserules.js` runs it in
   `preUpdateActor` and writes the level into `changes`, so it rides the Hit Point write on the
   client making it. It reads the write, not the damage behind it: a failed drop save, a declined
-  hold and a GM's sheet edit count like a damage card (the user's ruling, 2026-10-28: anything
-  that goes to 0 pays; By the Books' old copy missed the first two). dnd5e's `applyDamage` hands
+  hold and a GM's sheet edit count like a damage card (the user's ruling: anything that goes to 0
+  pays; By the Books' old copy missed the first two). dnd5e's `applyDamage` hands
   its update no mark saying it was damage, which is why the rule cannot and does not try to tell
   damage from an edit. By the Books' damage receipt snapshots `_source` Exhaustion either side of
   its `applyDamage` and its `revertPlan` restores the recorded prior level with the Hit Points, so
