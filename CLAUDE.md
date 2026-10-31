@@ -6,11 +6,10 @@ client itself. Part of Open Roll 5e (the suite repo is `..`, its CLAUDE.md has t
 conventions; the module is public but kept out of the catalogue, so `repos.json` gives it no
 blurb). Plain ES modules, no build step, no patching, no libWrapper, MIT. Built from suite issue #9.
 
-**State (2026-10-31).** 1.4.0 on `main`, uncommitted and unreleased: the two sidebar-tabs rules
-moved to Card Catalogue (`fvtt-mod-cardcatalogue`, the user's ruling: one module for the sidebar's
-cases and tabs), which carries their switches over and steps aside while a House Rules that still
-has them runs. Deployed `--local` beside Card Catalogue 0.1.0 and walked on the sandbox. 1.3.0
-(both sidebar rules) is released and on prod; a release of 1.4.0 goes with Card Catalogue's.
+**State (2026-10-31).** 1.4.0 released and on prod (the installer, every released file served
+byte-identical), with Card Catalogue 1.0.0: the two sidebar-tabs rules moved there (the user's
+ruling: one module for the sidebar's cases and tabs), which carries their switches over and steps
+aside while a House Rules that still has them runs.
 
 ## The rules
 
