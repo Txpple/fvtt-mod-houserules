@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.4.0
+
+- **The two sidebar-tabs rules move to Card Catalogue** (`fvtt-mod-cardcatalogue`), the module
+  that replaces the sidebar's directories with cases of cards: *Players see only the sidebar tabs
+  they use* and *GMs see only the sidebar tabs they use* leave House Rules whole, their switches
+  carried over by Card Catalogue on a GM's first load. Install Card Catalogue with or before this
+  version; while an older House Rules still runs them, Card Catalogue's copies step aside. House
+  Rules keeps the arrow keys and going down.
+
 ## 1.3.0
 
 - **GMs see only the sidebar tabs they use**, a new rule with its own switch, on by default: a
