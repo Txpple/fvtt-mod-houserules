@@ -23,7 +23,11 @@ aside while a House Rules that still has them runs.
   above 0 to 0 or below cost one level, capped at 6, null for a hold at 1, a heal, an actor type
   without Exhaustion, or an update that already sets Exhaustion. `houserules.js` runs it in
   `preUpdateActor` and writes the level into `changes`, so it rides the Hit Point write on the
-  client making it. It reads the write, not the damage behind it: a failed drop save, a declined
+  client making it, and leaves dnd5e's `dnd5e.originalExhaustion` note on the update's options:
+  since dnd5e 6.0 the level is read off the Exhaustion effect, which follows the attribute only
+  through that note, and dnd5e's own `_preUpdate` (which runs before the hook) leaves it only when
+  the update already carried Exhaustion; without it the stored level rose and the sheet did not
+  (`dropWrite` is the write, tested). It reads the write, not the damage behind it: a failed drop save, a declined
   hold and a GM's sheet edit count like a damage card (the user's ruling: anything that goes to 0
   pays; By the Books' old copy missed the first two). dnd5e's `applyDamage` hands
   its update no mark saying it was damage, which is why the rule cannot and does not try to tell

@@ -1,5 +1,13 @@
 import { describe, expect, it } from "vitest";
-import { EXHAUSTION, HP, ID, MAX, levelAtDrop } from "../scripts/rules/going-down.js";
+import {
+  dropWrite,
+  EXHAUSTION,
+  HP,
+  ID,
+  MAX,
+  ORIGINAL,
+  levelAtDrop
+} from "../scripts/rules/going-down.js";
 
 describe("the rule's names", () => {
   it("reads and writes dnd5e's own paths", () => {
@@ -68,5 +76,33 @@ describe("levelAtDrop — the cap", () => {
   });
   it("a fractional level stored by hand is rounded down before the step", () => {
     expect(levelAtDrop({ before: 3, after: 0, exhaustion: 1.5 })).toBe(2);
+  });
+});
+
+describe("dropWrite — the level, and the note dnd5e moves its Exhaustion effect by", () => {
+  it("names dnd5e's own note", () => {
+    expect(ORIGINAL).toBe("dnd5e.originalExhaustion");
+  });
+  it("a drop from 0: level 1 into the changes, 0 as the note (Session 03: the effect never rose)", () => {
+    expect(dropWrite({ before: 11, after: 0, exhaustion: 0 })).toEqual({
+      changes: { [EXHAUSTION]: 1 },
+      options: { [ORIGINAL]: 0 }
+    });
+  });
+  it("a drop from 1: level 2, noted from 1 (Lysandra on the glass)", () => {
+    expect(dropWrite({ before: 11, after: 0, exhaustion: 1 })).toEqual({
+      changes: { [EXHAUSTION]: 2 },
+      options: { [ORIGINAL]: 1 }
+    });
+  });
+  it("keeps a note another writer already left", () => {
+    expect(dropWrite({ before: 5, after: 0, exhaustion: 2, original: 2 }).options).toEqual({
+      [ORIGINAL]: 2
+    });
+  });
+  it("writes nothing when the update costs nothing", () => {
+    expect(dropWrite({ before: 12, after: 1, exhaustion: 0 })).toBeNull();
+    expect(dropWrite({ before: 12, after: 0, exhaustion: 0, exhaustionSet: true })).toBeNull();
+    expect(dropWrite({ before: 7, after: 0, exhaustion: 6 })).toBeNull();
   });
 });

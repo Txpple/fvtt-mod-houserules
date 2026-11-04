@@ -22,6 +22,17 @@ export const HP = "system.attributes.hp.value";
 export const EXHAUSTION = "system.attributes.exhaustion";
 
 /**
+ * Where dnd5e keeps the level an update starts from, on the update's options. Since dnd5e 6.0 the
+ * actor's Exhaustion is read off its Exhaustion effect (`prepareExhaustionLevel`), and a write to
+ * the attribute moves that effect only when its `_onUpdate` finds this note, which its own
+ * `_preUpdate` leaves only when the update already carried Exhaustion. The rule adds the level in
+ * the `preUpdateActor` hook, after `_preUpdate` has run, so it leaves the note itself; without it
+ * the stored level rose while the effect, and with it the sheet, stayed where it was (Session 03 of
+ * Echoes of Halruaa: Lysandra dropped on the glass and stayed at 1).
+ */
+export const ORIGINAL = "dnd5e.originalExhaustion";
+
+/**
  * The level of Exhaustion one update costs, or null when it costs nothing.
  *
  * @param {object} drop
@@ -42,4 +53,20 @@ export function levelAtDrop({ before, after, exhaustion, exhaustionSet = false }
   if (!Number.isFinite(now)) return null;
   const next = Math.min(MAX, Math.floor(now) + 1);
   return next > now ? next : null;
+}
+
+/**
+ * The whole write one update gets: the level into the changes, and the level it rises from into the
+ * options (ORIGINAL), so dnd5e raises its Exhaustion effect with it. Null when the update costs
+ * nothing. A note another writer already left is kept.
+ *
+ * @param {object} drop                As for levelAtDrop.
+ * @param {number} [drop.original]     The note already on the options, if any.
+ * @returns {{ changes: Record<string, number>, options: Record<string, number> } | null}
+ */
+export function dropWrite({ original, ...drop }) {
+  const level = levelAtDrop(drop);
+  if (level === null) return null;
+  const from = Number.isFinite(original) ? original : Math.floor(Number(drop.exhaustion));
+  return { changes: { [EXHAUSTION]: level }, options: { [ORIGINAL]: from } };
 }

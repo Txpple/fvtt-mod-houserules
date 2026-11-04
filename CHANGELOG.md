@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.4.1 (not yet released)
+
+- **Going down costs a level of Exhaustion now shows on dnd5e 6.0.** The level was written, but
+  dnd5e 6.0 reads Exhaustion off its Exhaustion effect, which never rose, so the sheet, the
+  token and the rolls stayed at the old level (a drop from 0 showed nothing at all). The rule now
+  leaves dnd5e the note it moves the effect by, and the effect rises with the drop; By the Books'
+  Revert takes it back down.
+
 ## 1.4.0
 
 - **The two sidebar-tabs rules move to Card Catalogue** (`fvtt-mod-cardcatalogue`), the module

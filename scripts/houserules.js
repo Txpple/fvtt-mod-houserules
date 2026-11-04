@@ -78,17 +78,23 @@ Hooks.once("init", () => {
 // its write (By the Books') records the level and reverts it with the Hit Points. The rule reads
 // the update, not the damage behind it, so a failed drop save, a declined hold and a GM's edit
 // count like a damage card; an update already setting Exhaustion is left as it is.
-Hooks.on("preUpdateActor", (actor, changes) => {
+// dnd5e 6.0 reads the level off its Exhaustion effect, which follows the attribute only through the
+// note on the options (going-down.js, ORIGINAL); the rule leaves it, dnd5e's _onUpdate on this same
+// client then raises the effect.
+Hooks.on("preUpdateActor", (actor, changes, options) => {
   try {
     if (!game.settings.get(MODULE_ID, goingDown.ID)) return;
-    const level = goingDown.levelAtDrop({
+    const write = goingDown.dropWrite({
       before: actor.system?.attributes?.hp?.value,
       after: foundry.utils.getProperty(changes, goingDown.HP),
       exhaustion: actor.system?.attributes?.exhaustion,
-      exhaustionSet: foundry.utils.hasProperty(changes, goingDown.EXHAUSTION)
+      exhaustionSet: foundry.utils.hasProperty(changes, goingDown.EXHAUSTION),
+      original: options ? foundry.utils.getProperty(options, goingDown.ORIGINAL) : undefined
     });
-    if (level === null) return;
-    foundry.utils.setProperty(changes, goingDown.EXHAUSTION, level);
+    if (write === null) return;
+    for (const [path, value] of Object.entries(write.changes)) foundry.utils.setProperty(changes, path, value);
+    if (options) for (const [path, value] of Object.entries(write.options)) foundry.utils.setProperty(options, path, value);
+    const level = write.changes[goingDown.EXHAUSTION];
     log.info(t("goingDown.charged", { name: actor.name, level }));
   } catch (err) {
     log.error(t("goingDown.failed", { name: actor?.name ?? "?" }), err);
