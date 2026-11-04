@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.4.1 (not yet released)
+## 1.4.1
 
 - **Going down costs a level of Exhaustion now shows on dnd5e 6.0.** The level was written, but
   dnd5e 6.0 reads Exhaustion off its Exhaustion effect, which never rose, so the sheet, the
