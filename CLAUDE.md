@@ -6,10 +6,10 @@ client itself. Part of Open Roll 5e (the suite repo is `..`, its CLAUDE.md has t
 conventions; the module is public but kept out of the catalogue, so `repos.json` gives it no
 blurb). Plain ES modules, no build step, no patching, no libWrapper, MIT. Built from suite issue #9.
 
-**State (2026-10-31).** 1.4.0 released and on prod (the installer, every released file served
-byte-identical), with Card Catalogue 1.0.0: the two sidebar-tabs rules moved there (the user's
-ruling: one module for the sidebar's cases and tabs), which carries their switches over and steps
-aside while a House Rules that still has them runs.
+**State (2026-11-04).** 1.4.1 released and on prod (the installer, every released file served
+byte-identical): going down's level shows on dnd5e 6.0, the hook leaving dnd5e's
+`originalExhaustion` note. 1.4.0 moved the two sidebar-tabs rules to Card Catalogue, which carries
+their switches over and steps aside while a House Rules that still has them runs.
 
 ## The rules
 
